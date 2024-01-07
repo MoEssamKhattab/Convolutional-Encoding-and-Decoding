@@ -5,7 +5,7 @@ from util.util import awgn, calculate_ber
 
 def communication_link(bit_seq, src_encoded_mod_sig, channel_encoded_mod_sig, snr_start, snr_end, snr_step):
     """
-    Communication Link (Modulation -> AWGN Channel -> Demodulation)
+    Communication Link (AWGN Channel -> Demodulation)
     :param bit_seq: original bit sequence
     :param src_encoded_mod_sig: source encoded modulated signal
     :param channel_encoded_mod_sig: channel encoded modulated signal
