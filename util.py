@@ -36,17 +36,3 @@ def encode_sequence_with_polynomial(A, polynomial):
             C += A[i]
     return xor_sequence(C)
 
-
-def add_awgn(A, Pe):
-    if not (0 <= Pe <= 1):
-        raise ValueError("Probability 'Pe' must be between 0 and 1")
-    noise_sequence = ''.join(['1' if random.random() < Pe else '0' for _ in range(len(A))])
-    result = xor_two_sequences(A, noise_sequence)
-
-    return result
-
-
-original_sequence = '00000000'
-probability_of_one = 1.1
-noisy_sequence = add_awgn(original_sequence, probability_of_one)
-print(noisy_sequence)
