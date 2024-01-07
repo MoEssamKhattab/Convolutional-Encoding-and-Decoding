@@ -1,9 +1,9 @@
-from util import encode_sequence_with_polynomial
+from util.util import encode_sequence_with_polynomial
 
 generator_polynomials_example = [[1, 1, 1], [0, 1, 1], [1, 0, 1]]
 
 
-def divide_into_blocks(A,block_size):
+def divide_into_blocks(A, block_size):
     num_blocks = (len(A) + block_size - 1) // block_size
     A += '0' * (num_blocks * block_size - len(A))
     blocks = [A[i * block_size: (i + 1) * block_size] for i in range(num_blocks)]
@@ -24,10 +24,13 @@ def encode(A, generator_polynomials, k):
 def encode_all_blocks(blocks, generator_polynomials, k):
     encoded_sequences = []
     for block in blocks:
-        sequence = encode(block,generator_polynomials,k)
-        encoded_sequences.append(sequence)
+        sequence = encode(block, generator_polynomials, k)
+        encoded_sequences.extend(sequence)
+    encoded_sequences = [int(char) for string in encoded_sequences for char in string]
     return encoded_sequences
 
 
-blocks = divide_into_blocks('010001010001011',5)
-print(encode_all_blocks(blocks, generator_polynomials_example, 3))
+def channel_encoder(A, generator, k, block_size):
+    blocks = divide_into_blocks(A, block_size)
+    return encode_all_blocks(blocks, generator, 3)
+

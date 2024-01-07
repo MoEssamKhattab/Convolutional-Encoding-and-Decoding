@@ -36,6 +36,7 @@ def encode_sequence_with_polynomial(A, polynomial):
             C += A[i]
     return xor_sequence(C)
 
+
 # AWGN Channel
 def awgn(signal, snr):
     """
