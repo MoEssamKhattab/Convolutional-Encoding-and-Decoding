@@ -13,7 +13,9 @@ def bpsk_receiver(received_signal, fc, Tb, n):
     num_bits = len(received_signal) // n
     restored_bit_seq = np.zeros(num_bits)
 
+    t_total = num_bits * Tb
     dt = Tb/n
+    t = np.arange(0, t_total, dt)
 
     basis_function = generate_basis_function(fc, Tb, n)
 

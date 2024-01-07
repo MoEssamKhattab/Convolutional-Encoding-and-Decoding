@@ -16,9 +16,9 @@ def bpsk_transmitter(bit_seq, fc, Ab, Tb, n):
     num_bits = len(bit_seq)         # number of bits
     n_total = num_bits * n      # total number of samples
 
-    t_total = num_bits * Tb     # total time duration of symbol/bit
-    dt = Tb/n
-    t = np.arange(0, t_total, dt) # time axis
+    #t_total = num_bits * Tb     # total time duration of symbol/bit
+    #dt = Tb/n
+    #t = np.arange(0, t_total, dt) # time axis
 
     Eb = Ab**2 * Tb
     basis_function = generate_basis_function(fc, Tb, n)
@@ -28,7 +28,7 @@ def bpsk_transmitter(bit_seq, fc, Ab, Tb, n):
         sign = (-1)**(bit_seq[i]+1) # bit 1 -> 1, bit 0 -> -1       
         passbannd_signal[i*n:(i+1)*n] = sign * np.sqrt(Eb) * basis_function
 
-    return passbannd_signal, t
+    return passbannd_signal #, t
 
 def generate_basis_function(fc, Tb, n):
     """
