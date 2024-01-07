@@ -37,7 +37,7 @@ def communication_link(bit_seq, src_encoded_mod_sig, snr_start, snr_end, snr_ste
 
     #plt.plot(SNR_dB, channel_encoded_ber, label='Channel Encoded')
     plt.plot(SNR_dB, src_encoded_ber, label='Source Encoded')
-    plt.yscale('log')
+    #plt.yscale('log')
     plt.xlabel('SNR (dB)')
     plt.ylabel('BER')
     plt.legend()

@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def bpsk_transmitter(bit_seq, fc, Ab, Tb, n):
     """
@@ -10,7 +11,7 @@ def bpsk_transmitter(bit_seq, fc, Ab, Tb, n):
     :param n: number of samples per bit duration
     :return: BPSK modulated signal
     """
-    if fc < 10/Tb:
+    if fc <= 10/Tb:
         raise ValueError('Carrier frequency (fc) must be at least 10 times the the bit rate (1/Tb)')
     
     num_bits = len(bit_seq)         # number of bits
@@ -22,12 +23,17 @@ def bpsk_transmitter(bit_seq, fc, Ab, Tb, n):
 
     Eb = Ab**2 * Tb
     basis_function = generate_basis_function(fc, Tb, n)
+    plt.plot(basis_function)
+    plt.title('Basis Function')
+    plt.show()
     passbannd_signal = np.zeros(n_total)
 
     for i in range(num_bits):
         sign = (-1)**(bit_seq[i]+1) # bit 1 -> 1, bit 0 -> -1       
         passbannd_signal[i*n:(i+1)*n] = sign * np.sqrt(Eb) * basis_function
 
+        plt.plot(passbannd_signal)
+        plt.show()
     return passbannd_signal #, t
 
 def generate_basis_function(fc, Tb, n):
@@ -40,4 +46,7 @@ def generate_basis_function(fc, Tb, n):
     """
     dt = Tb/n
     t_symbol = np.arange(0, Tb, dt)
+    plt.plot(t_symbol, np.cos(2*np.pi*fc*t_symbol))
+    plt.title('Cosine Basis Function')
+    plt.show()
     return np.sqrt(2/Tb) * np.cos(2*np.pi*fc*t_symbol)

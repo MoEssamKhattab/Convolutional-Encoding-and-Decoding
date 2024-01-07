@@ -16,4 +16,6 @@ print(bit_seq)
 
 passbannd_signal = bpsk_transmitter(bit_seq, fc, Ab, Tb, n)
 
-restored_src_encoded_bit_seq = communication_link(bit_seq,passbannd_signal,-100,0,1, fc, Tb, n)     # at the highest SNR
+restored_src_encoded_bit_seq = communication_link(bit_seq,passbannd_signal,-100,10,1, fc, Tb, n)
+
+print(restored_src_encoded_bit_seq)

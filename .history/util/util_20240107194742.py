@@ -45,7 +45,7 @@ def awgn(signal, snr):
     :param snr: signal to noise ratio
     :return: noisy signal
     """
-    signal_power = np.mean(np.abs(signal)**2)
+    signal_power = np.sum(signal**2)/len(signal)
     noise_power = signal_power/(10**(snr/10))
     noise = np.sqrt(noise_power)*np.random.randn(len(signal))
     return signal + noise
