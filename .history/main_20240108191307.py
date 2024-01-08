@@ -35,6 +35,3 @@ def communication_link(s,generator_polynomials,K,fc,Ab,Tb,n,snr_start,snr_end,sn
     decoded_signal = channel_demod_channel_decode(s,modulated_signal_without_conv,modulated_signal,generator_polynomials,K,snr_start,snr_end,snr_step,fc,Tb,n)
 
     return decoded_signal
-
-
-decoded_signal = communication_link(s,generator_polynomials,K,fc,Ab,Tb,n,snr_start,snr_end,snr_step)
