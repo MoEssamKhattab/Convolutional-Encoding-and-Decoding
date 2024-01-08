@@ -16,4 +16,4 @@ snr_step = 1
 channel_encoded_sequence = encode(s, generator_polynomials, 3)
 modulated_signal = bpsk_transmitter(channel_encoded_sequence,fc,Ab,Tb,n)
 modulated_signal_without_conv = bpsk_transmitter(s,fc,Ab,Tb,n)
-decoded_signal = communication_link(s,channel_encoded_sequence,modulated_signal_without_conv,modulated_signal,generator_polynomials,K,snr_start,snr_end,snr_step,fc,Tb,n)
+decoded_signal = communication_link(s,modulated_signal_without_conv,modulated_signal,generator_polynomials,K,snr_start,snr_end,snr_step,fc,Tb,n)

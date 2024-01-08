@@ -5,9 +5,10 @@ from util.util import awgn, calculate_ber,hamming_distance
 from conv.decoder import decode
 
 
-def communication_link(bit_seq, channel_encoded_sequence,bpsk_modulated_sequence_without_conv,modulated_signal,generator_polynomials,K,snr_start, snr_end, snr_step, fc, Tb, n):
+def communication_link(bit_seq,bpsk_modulated_sequence_without_conv,modulated_signal,generator_polynomials,K,snr_start, snr_end, snr_step, fc, Tb, n):
     """
     Communication Link (AWGN Channel -> Demodulation)
+    :param bpsk_modulated_sequence_without_conv:
     :param channel_encoded_sequence:
     :param modulated_signal:
     :param bit_seq: original bit sequence
