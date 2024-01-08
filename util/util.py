@@ -58,3 +58,7 @@ def calculate_ber(bit_seq, restored_bit_seq):
     :return: BER
     """
     return np.sum(a != b for a, b in zip(bit_seq, restored_bit_seq))/len(bit_seq)
+
+def generate_binary_sequences(n):
+    binary_sequences = [bin(i)[2:].zfill(n) for i in range(2 ** n)]
+    return binary_sequences
