@@ -1,16 +1,15 @@
-from encoder.encoder import encode
-from BPSK.pbsk_transmitter import bpsk_transmitter
-from encoder.decoder import decode
+from conv.encoder import encode
+from BPSK.bpsk_transmitter import bpsk_transmitter
 from communication_link import communication_link
 
 s = '101101' * 200
 K = 3
-generator_polynomials = [[1, 0, 0], [0, 1, 0], [1, 0, 1]]
+generator_polynomials = [[1, 1, 1], [1, 1, 0], [1, 0, 1]]
 fc = 0.1
 Ab = 1
 Tb = 100
 n = 1000
-snr_start = -35
+snr_start = -32
 snr_end = -10
 snr_step = 1
 

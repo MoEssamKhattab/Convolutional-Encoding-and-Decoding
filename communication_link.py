@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from BPSK.bpsk_receiver import bpsk_receiver
 from util.util import awgn, calculate_ber,hamming_distance
-from encoder.decoder import decode
+from conv.decoder import decode
 
 
 def communication_link(bit_seq, channel_encoded_sequence,bpsk_modulated_sequence_without_conv,modulated_signal,generator_polynomials,K,snr_start, snr_end, snr_step, fc, Tb, n):
