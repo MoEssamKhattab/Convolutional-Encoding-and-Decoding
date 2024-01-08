@@ -2,7 +2,7 @@ from BPSK.pbsk_transmitter import bpsk_transmitter
 from encoder import encoder
 from communication_link import communication_link
 
-bit_seq = [0, 1, 0, 0, 1, 1, 0, 1, 1, 0] * 100
+bit_seq = [0, 1, 0, 0, 1, 1, 0, 1, 1, 0]
 fc = 0.1
 Ab = 1
 Tb = 100
@@ -17,3 +17,4 @@ print(bit_seq)
 passbannd_signal = bpsk_transmitter(bit_seq, fc, Ab, Tb, n)
 
 restored_src_encoded_bit_seq = communication_link(bit_seq,passbannd_signal,-100,0,1, fc, Tb, n)     # at the highest SNR
+print(restored_src_encoded_bit_seq)

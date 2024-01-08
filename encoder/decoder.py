@@ -5,38 +5,56 @@
 #     "10": ["110", "001"], 
 #     "11": ["011", "100"]
 # }
+from .encoder import convert_sequence_to_string, encode
+from util.util import generate_binary_sequences, encode_sequence_with_polynomial
 
-states = { 
-    "00": ["000", "111"], 
-    "01": ["001", "110"], 
-    "10": ["011", "100"], 
-    "11": ["010", "101"]
-}
+states = None
+generator_polynomials_example = [[1, 1, 1], [0, 1, 1], [1, 0, 1]]
 
 # Path Metric
 pathes = {
-    "00": ["00", "10"], 
-    "01": ["00", "10"], 
-    "10": ["01", "11"], 
+    "00": ["00", "10"],
+    "01": ["00", "10"],
+    "10": ["01", "11"],
     "11": ["01", "11"]
 }
+
+
+def state_generator(bits, generator_polynomials, k):
+    dict = {}
+    binary_seq = generate_binary_sequences(bits)
+    for seq in binary_seq:
+        dict[seq] = []
+    for seq in binary_seq:
+        for bit in ['0', '1']:
+            encoded_sequences = []
+            for polynomial in generator_polynomials:
+                C = ''
+                for i in range(len(seq) - k + 2):
+                    C += encode_sequence_with_polynomial(bit + seq, polynomial)
+                encoded_sequences.append(C)
+            encoded_sequence_string = convert_sequence_to_string(encoded_sequences)
+            dict[seq].append(encoded_sequence_string)
+    return dict
 
 
 def binary_string_to_array(input_str):
     while len(input_str) % 3 != 0:
         input_str += '0'
-    result_array = [input_str[i:i+3] for i in range(0, len(input_str), 3)]
+    result_array = [input_str[i:i + 3] for i in range(0, len(input_str), 3)]
     return result_array
+
 
 def compare_bits_with_array(main_str, str_array):
     result_array = []
     for str_in_array in str_array:
         if len(main_str) != len(str_in_array):
             raise ValueError("Input strings must have the same length")
-        
+
         mismatch_count = sum(bit1 != bit2 for bit1, bit2 in zip(main_str, str_in_array))
         result_array.append(mismatch_count)
     return result_array
+
 
 def combine_two_routes(route1, route2):
     combined_route = {
@@ -46,11 +64,13 @@ def combine_two_routes(route1, route2):
     }
     return combined_route
 
+
 def check_path(routes, to):
     for route in routes:
         if route["to"] == to:
             return route
-    return None  
+    return None
+
 
 def drop_duplicates(routes):
     unique_routes = []
@@ -69,41 +89,37 @@ def drop_duplicates(routes):
 
     return unique_routes
 
+
 def min_dist_value(routes):
     if not routes:
-        return None  
+        return None
     min_dist_route = min(routes, key=lambda x: x["dist"])
     return min_dist_route["value"]
 
 
-def decode(sequence):
-    temp_route = {}
-    one_before = {}
+def decode(sequence, generator_polynomials, k):
+    sequence = ''.join(str(int(element)) for element in sequence)
 
+    states = state_generator(k - 1, generator_polynomials, 3)
     two_routes = []
     four_routes = []
-    final_route = ""
-
-    hamming_dist = []
     arr_strings = binary_string_to_array(sequence)
-
     for i in range(len(arr_strings)):
         eight_routes = []
-
-        if(i == 0):
+        if (i == 0):
             hamming_dist = compare_bits_with_array(arr_strings[i], ["000", "111"])
             two_routes.append({
-                "to": pathes["00"][0], 
+                "to": pathes["00"][0],
                 "value": "0",
                 "dist": hamming_dist[0]
             })
             two_routes.append({
-                "to": pathes["00"][1], 
+                "to": pathes["00"][1],
                 "value": "1",
                 "dist": hamming_dist[1]
             })
 
-        elif(i == 1):
+        elif (i == 1):
             for state in pathes["00"]:
                 hamming_dist = compare_bits_with_array(arr_strings[i], states[state])
                 one_before = check_path(two_routes, state)
@@ -113,16 +129,16 @@ def decode(sequence):
                         "value": str(index),
                         "dist": hamming_dist[index]
                     }
-                    
+
                     combined_route = combine_two_routes(one_before, temp_route)
-                    
+
                     four_routes.append(combined_route)
 
         else:
             for key, value in states.items():
                 hamming_dist = compare_bits_with_array(arr_strings[i], value)
 
-                for index in range(len(pathes[key])):  
+                for index in range(len(pathes[key])):
                     temp_route = {
                         "to": pathes[key][index],
                         "value": str(index),
@@ -131,17 +147,14 @@ def decode(sequence):
                     one_before = check_path(four_routes, key)
                     combined_route = combine_two_routes(one_before, temp_route)
                     eight_routes.append(combined_route)
-            print(eight_routes)
             four_routes = drop_duplicates(eight_routes)
-            print(four_routes)
-
     final_route = min_dist_value(four_routes)
-
     return final_route
-    
 
 
-        
-print("The code bits after correction: ", decode("001110011001"))
+s = '10011100'
+encoded = encode(s, generator_polynomials_example, 3)
 
-
+# print(f"S initially {s}")
+# print(f"After Encoding {encoded}")
+# print("The code bits after correction: ", decode(encoded, generator_polynomials_example, 3))

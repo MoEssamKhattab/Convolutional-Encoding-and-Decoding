@@ -1,12 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from BPSK.bpsk_receiver import bpsk_receiver
-from util.util import awgn, calculate_ber
+from util.util import awgn, calculate_ber,hamming_distance
+from encoder.decoder import decode
 
 
-def communication_link(bit_seq, src_encoded_mod_sig, snr_start, snr_end, snr_step, fc, Tb, n):
+def communication_link(bit_seq, channel_encoded_sequence,bpsk_modulated_sequence_without_conv,modulated_signal,generator_polynomials,K,snr_start, snr_end, snr_step, fc, Tb, n):
     """
     Communication Link (AWGN Channel -> Demodulation)
+    :param channel_encoded_sequence:
+    :param modulated_signal:
     :param bit_seq: original bit sequence
     :param src_encoded_mod_sig: source encoded modulated signal
     :param channel_encoded_mod_sig: channel encoded modulated signal
@@ -17,25 +20,23 @@ def communication_link(bit_seq, src_encoded_mod_sig, snr_start, snr_end, snr_ste
     """
     SNR_dB = np.arange(snr_start, snr_end + snr_step, snr_step)
     src_encoded_ber = np.zeros(len(SNR_dB))
-    channel_encoded_ber = np.zeros(len(SNR_dB))
-
+    channel_decoded_ber = np.zeros(len(SNR_dB))
     for i in range(len(SNR_dB)):
         # AWGN Channel
-        noisy_src_encoded_sig = awgn(src_encoded_mod_sig, SNR_dB[i])
-
-        # noisy_channel_encoded_sig = awgn(channel_encoded_mod_sig, SNR_dB[i])
+        noisy_channel_encoded_sig = awgn(modulated_signal, SNR_dB[i])
+        noisy_src_encoded_sig = awgn(bpsk_modulated_sequence_without_conv, SNR_dB[i])
 
         # Demodulation
+        restored_channel_encoded_bit_seq = bpsk_receiver(noisy_channel_encoded_sig, fc, Tb, n)
         restored_src_encoded_bit_seq = bpsk_receiver(noisy_src_encoded_sig, fc, Tb, n)
-        # restored_channel_encoded_bit_seq = bpsk_receiver(noisy_channel_encoded_sig)
 
         # BER
         src_encoded_ber[i] = calculate_ber(bit_seq, restored_src_encoded_bit_seq)
+        channel_decoded_signal = decode(restored_channel_encoded_bit_seq,generator_polynomials,K)
 
-        # TODO: Channel Decoding here
-        # channel_encoded_ber[i] = calculate_ber(bit_seq, restored_channel_encoded_bit_seq)
+        channel_decoded_ber[i] = hamming_distance(bit_seq, channel_decoded_signal)
 
-    #plt.plot(SNR_dB, channel_encoded_ber, label='Channel Encoded')
+    plt.plot(SNR_dB, channel_decoded_ber, label='Channel Encoded')
     plt.plot(SNR_dB, src_encoded_ber, label='Source Encoded')
     plt.yscale('log')
     plt.xlabel('SNR (dB)')
@@ -43,6 +44,4 @@ def communication_link(bit_seq, src_encoded_mod_sig, snr_start, snr_end, snr_ste
     plt.legend()
     plt.grid()
     plt.show()
-
-    print(src_encoded_ber)
-    return restored_src_encoded_bit_seq  # of the max SNR
+    return channel_decoded_signal  # of the max SNR

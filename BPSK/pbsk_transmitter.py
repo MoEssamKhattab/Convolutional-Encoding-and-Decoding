@@ -25,7 +25,7 @@ def bpsk_transmitter(bit_seq, fc, Ab, Tb, n):
     passbannd_signal = np.zeros(n_total)
 
     for i in range(num_bits):
-        sign = (-1)**(bit_seq[i]+1) # bit 1 -> 1, bit 0 -> -1       
+        sign = (-1)**(int(bit_seq[i])+1) # bit 1 -> 1, bit 0 -> -1
         passbannd_signal[i*n:(i+1)*n] = sign * np.sqrt(Eb) * basis_function
 
     return passbannd_signal #, t

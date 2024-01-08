@@ -57,7 +57,15 @@ def calculate_ber(bit_seq, restored_bit_seq):
     :param restored_bit_seq: restored bit sequence
     :return: BER
     """
-    return np.sum(a != b for a, b in zip(bit_seq, restored_bit_seq))/len(bit_seq)
+    return np.sum(float(a) != b for a, b in zip(bit_seq, restored_bit_seq))/len(bit_seq)
+
+
+def hamming_distance(str1, str2):
+    distance = sum(bit1 != bit2 for bit1, bit2 in zip(str1, str2))
+
+    return distance/len(str1)
+
+
 
 def generate_binary_sequences(n):
     binary_sequences = [bin(i)[2:].zfill(n) for i in range(2 ** n)]
