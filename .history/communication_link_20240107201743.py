@@ -23,6 +23,10 @@ def communication_link(bit_seq, src_encoded_mod_sig, snr_start, snr_end, snr_ste
         # AWGN Channel
         noisy_src_encoded_sig = awgn(src_encoded_mod_sig, SNR_dB[i])
 
+        # plot the noisy signal
+        # plt.plot(noisy_src_encoded_sig)
+        # plt.show()
+
         # noisy_channel_encoded_sig = awgn(channel_encoded_mod_sig, SNR_dB[i])
 
         # Demodulation
@@ -31,13 +35,11 @@ def communication_link(bit_seq, src_encoded_mod_sig, snr_start, snr_end, snr_ste
 
         # BER
         src_encoded_ber[i] = calculate_ber(bit_seq, restored_src_encoded_bit_seq)
-
-        # TODO: Channel Decoding here
         # channel_encoded_ber[i] = calculate_ber(bit_seq, restored_channel_encoded_bit_seq)
 
     #plt.plot(SNR_dB, channel_encoded_ber, label='Channel Encoded')
     plt.plot(SNR_dB, src_encoded_ber, label='Source Encoded')
-    plt.yscale('log')
+    #plt.yscale('log')
     plt.xlabel('SNR (dB)')
     plt.ylabel('BER')
     plt.legend()
